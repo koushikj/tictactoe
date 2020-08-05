@@ -2,8 +2,10 @@ package com.example.tictactoe;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,14 +19,33 @@ public class MainActivity extends AppCompatActivity {
     int[][] winningStates={{0,1,2},{3,4,5},{6,7,8},{0,3,6},{1,4,7},{2,5,8},{0,4,8},{2,4,6}};
     boolean gameOver=false;
     int played=0;
+    MediaPlayer mediaPlayer;
+    boolean volumeOn=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mediaPlayer = MediaPlayer.create(this,R.raw.tic);
+        muteAudio(null);
     }
 
+    public void muteAudio(View view) {
+        ImageButton volumeButton = (ImageButton) findViewById(R.id.volumeImageButton);
+        if(volumeOn){
+            volumeOn=false;
+            mediaPlayer.setVolume(0,0);
+            volumeButton.setImageResource(R.drawable.mute);
+
+        }else {
+            volumeOn=true;
+            mediaPlayer.setVolume(1,1);
+            volumeButton.setImageResource(R.drawable.unmute);
+        }
+
+    }
     public void dropIn(View view) {
+        mediaPlayer.start();
         played++;
         ImageView counter = (ImageView) view;
         int tappedCounter = Integer.parseInt(counter.getTag().toString());
